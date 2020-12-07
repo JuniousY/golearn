@@ -5,6 +5,7 @@ import (
 	"math"
 	"math/cmplx"
 	"runtime"
+	"strings"
 )
 
 var (
@@ -20,8 +21,6 @@ const (
 	// 再往右移 99 位，即 Small = 1 << 1，或者说 Small = 2
 	Small = Big >> 99
 )
-
-
 
 func main() {
 	fmt.Println("Hello, 世界")
@@ -61,7 +60,6 @@ func main() {
 		fmt.Printf("%s.\n", os)
 	}
 
-
 	i, j := 42, 2701
 	p := &i         // 指向 i
 	fmt.Println(*p) // 通过指针读取 i 的值
@@ -71,7 +69,6 @@ func main() {
 	p = &j         // 指向 j
 	*p = *p / 37   // 通过指针对 j 进行除法运算
 	fmt.Println(j) // 查看 j 的值
-
 
 	var a [2]string
 	a[0] = "Hello"
@@ -115,9 +112,9 @@ func pow(x, n, lim float64) float64 {
 
 func Sqrt(x float64) float64 {
 	z := 1.0
-	for i:=0; i<10; i++ {
+	for i := 0; i < 10; i++ {
 		fmt.Println(z)
-		z -= (z*z - x) / (2*z)
+		z -= (z*z - x) / (2 * z)
 	}
 	return z
 }
@@ -136,9 +133,76 @@ func Pic(dx, dy int) [][]uint8 {
 	for i := range data {
 		data[i] = make([]uint8, dx)
 		for j := range data[i] {
-			data[i][j] = uint8((i+j)/2)
+			data[i][j] = uint8((i + j) / 2)
 		}
 	}
-	return data;
+	return data
 }
-  
+
+type Vertex2 struct {
+	Lat, Long float64
+}
+
+var m = map[string]Vertex2{
+	"Bell Labs": {40.68433, -74.39967},
+	"Google":    {37.42202, -122.08408},
+}
+
+func mapFunc() {
+	m := make(map[string]int)
+
+	m["Answer"] = 42
+	fmt.Println("The value:", m["Answer"])
+
+	m["Answer"] = 48
+	fmt.Println("The value:", m["Answer"])
+
+	delete(m, "Answer")
+	fmt.Println("The value:", m["Answer"])
+
+	v, ok := m["Answer"]
+	fmt.Println("The value:", v, "Present?", ok)
+}
+
+func WordCount(s string) map[string]int {
+	list := strings.Fields(s)
+	result := make(map[string]int)
+	for _, word := range list {
+		result[word]++
+	}
+	return result
+}
+
+func compute(fn func(float64, float64) float64) float64 {
+	return fn(3, 4)
+}
+
+func adder() func(int) int {
+	sum := 0
+	return func(x int) int {
+		sum += x
+		return sum
+	}
+}
+
+func clousure() {
+	pos, neg := adder(), adder()
+	for i := 0; i < 10; i++ {
+		fmt.Println(
+			pos(i),
+			neg(-2*i),
+		)
+	}
+}
+
+// 返回一个“返回int的函数”
+func fibonacci() func() int {
+	x := 0
+	y := 1
+	return func() int {
+		t := x
+		x = y
+		y = t + x
+		return t
+	}
+}
