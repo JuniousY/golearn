@@ -82,6 +82,8 @@ func main() {
 	var s []int
 	s = append(s, 0, 1, 2, 3, 4, 5, 7)
 	printSlice(s)
+
+	printIPAddr()
 }
 
 func add(x, y int) int {
@@ -205,4 +207,105 @@ func fibonacci() func() int {
 		y = t + x
 		return t
 	}
+}
+
+type I interface {
+	M()
+}
+
+type T struct {
+	S string
+}
+
+func (t *T) M() {
+	fmt.Println(t.S)
+}
+
+type F float64
+
+func (f F) M() {
+	fmt.Println(f)
+}
+
+func intercateTest() {
+	var i I
+
+	i = &T{"Hello"}
+	describe(i)
+	i.M()
+
+	i = F(math.Pi)
+	describe(i)
+	i.M()
+}
+
+func describe(i I) {
+	fmt.Printf("(%v, %T)\n", i, i)
+}
+
+func describeEmpty(i interface{}) {
+	fmt.Printf("(%v, %T)\n", i, i)
+}
+
+func assertions() {
+	var i interface{} = "hello"
+
+	s := i.(string)
+	fmt.Println(s)
+
+	s, ok := i.(string)
+	fmt.Println(s, ok)
+
+	f, ok := i.(float64)
+	fmt.Println(f, ok)
+
+	//f = i.(float64) // 报错(panic)
+	//fmt.Println(f)
+}
+
+func typeSwitch(i interface{}) {
+	switch v := i.(type) {
+	case int:
+		fmt.Printf("Twice %v is %v\n", v, v*2)
+	case string:
+		fmt.Printf("%q is %v bytes long\n", v, len(v))
+	default:
+		fmt.Printf("I don't know about type %T!\n", v)
+	}
+}
+
+type IPAddr [4]byte
+
+// 给 IPAddr 添加一个 "String() string" 方法
+func (t IPAddr) String() string {
+	return fmt.Sprintf("%v.%v.%v.%v", t[0], t[1], t[2], t[3])
+}
+
+func printIPAddr() {
+	hosts := map[string]IPAddr{
+		"loopback":  {127, 0, 0, 1},
+		"googleDNS": {8, 8, 8, 8},
+	}
+	for name, ip := range hosts {
+		fmt.Printf("%v: %v\n", name, ip)
+	}
+}
+
+func sum(s []int, c chan int) {
+	sum := 0
+	for _, v := range s {
+		sum += v
+	}
+	c <- sum // 将和送入 c
+}
+
+func testSum() {
+	s := []int{7, 2, 8, -9, 4, 0}
+
+	c := make(chan int)
+	go sum(s[:len(s)/2], c)
+	go sum(s[len(s)/2:], c)
+	x, y := <-c, <-c // 从 c 中接收
+
+	fmt.Println(x, y, x+y)
 }
