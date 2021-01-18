@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"strings"
 	"sync"
 	"time"
 )
@@ -98,27 +97,30 @@ func main() {
 	defer p.Close()
 
 	all := p.Subscribe()
-	golang := p.SubscribeTopic(func(v interface{}) bool {
-		if s, ok := v.(string); ok {
-			return strings.Contains(s, "golang")
-		}
-		return false
-	})
-
-	p.Publish("hello,  world!")
-	p.Publish("hello, golang!")
+	//golang := p.SubscribeTopic(func(v interface{}) bool {
+	//	if s, ok := v.(string); ok {
+	//		return strings.Contains(s, "golang")
+	//	}
+	//	return false
+	//})
 
 	go func() {
 		for msg := range all {
+			time.Sleep(250 * time.Millisecond)
 			fmt.Println("all:", msg)
 		}
 	}()
 
-	go func() {
-		for msg := range golang {
-			fmt.Println("golang:", msg)
-		}
-	}()
+	//go func() {
+	//	for msg := range golang {
+	//		fmt.Println("golang:", msg)
+	//	}
+	//}()
+
+	p.Publish("hello,  world!")
+	p.Publish("hello, golang!")
+	p.Publish("hello,  world2!")
+	p.Publish("hello,  world3!")
 
 	// 运行一定时间后退出
 	time.Sleep(3 * time.Second)
