@@ -1,4 +1,4 @@
-package main
+package leetcode
 
 import (
 	"fmt"
@@ -106,4 +106,3 @@ func main() {
 	//nums := []int{0, 0, 0}
 	fmt.Println(threeSum(nums))
 }
-
