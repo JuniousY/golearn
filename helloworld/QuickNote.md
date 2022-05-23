@@ -18,3 +18,16 @@ server方法
 - Accept 一般异步调用。参数为net.Listener
 - Register, RegisterName 注册方法
 - ServeCodec, ServeConn一般异步调用，阻塞等待连接，为client做处理
+
+## 实用库
+
+### strings
+- func FieldsFunc(s string, f func(rune) bool) []string 按方法f拆分字符串
+
+### unicode
+- IsLetter, IsNumber, IsSpace
+
+### strconv
+- Itoa int -> String
+- Atoi String -> int
+- ParseBool, ParseFloat, ParseInt, ParseUint  从String转
