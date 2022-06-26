@@ -19,7 +19,7 @@ server方法
 - Register, RegisterName 注册方法
 - ServeCodec, ServeConn一般异步调用，阻塞等待连接，为client做处理
 
-## 实用库
+## standard library
 
 ### strings
 - func FieldsFunc(s string, f func(rune) bool) []string 按方法f拆分字符串
@@ -31,3 +31,8 @@ server方法
 - Itoa int -> String
 - Atoi String -> int
 - ParseBool, ParseFloat, ParseInt, ParseUint  从String转
+
+### os
+#### file
+- func ReadFile(name string) ([]byte, error)  读取整个文件
+- func Open(name string) (*File, error)  打开文件
