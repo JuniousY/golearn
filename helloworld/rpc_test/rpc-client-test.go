@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/rpc"
 
-	"./context"
+	"golearn/helloworld/rpc_test/context"
 )
 
 type HelloServiceClient struct {
